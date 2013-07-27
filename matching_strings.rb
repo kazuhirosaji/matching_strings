@@ -1,43 +1,61 @@
-def matching(input, shop_list)
-	p shop_list
-	i = 0
-	max = 0
-	hit = -1
-	shop_list.each { |shop|
-		score = 0
-		shop_strs = shop.split("")
-		shop_strs.each {|shop_str|
-			if (input.include?(shop_str))
-				score += 1
-			end
-		}
-		if (score > max)
-			max = score
-			hit = i
-		end
-		i += 1
-		p score
+# レーベンシュタイン距離の計算
+# str1, str2の文字列の距離を返す
+# 距離の値が小さい程、文字列は類似している
+def levenshteinDistance(str1, str2)
+	matrix = []
+	(str1.length + 1).times {|i|
+		matrix[i] = []
 	}
-	print("shop is #{shop_list[hit]}")
+
+	(str1.length + 1).times {|i|
+		matrix[i][0] = i
+	}
+
+	(str2.length + 1).times {|j|
+		matrix[0][j] = j
+	}
+
+	for i in 1..(str1.length) do
+		for j in 1..(str2.length) do
+			base = 1
+			if (str1[i - 1] == str2[j -1])
+				base = 0
+			end
+			compare = []
+			compare << (matrix[i - 1][j] + 1)
+			compare << (matrix[i][j - 1] + 1)
+			compare << (matrix[i - 1][j- 1] + base)
+		    matrix[i][j] = compare.min
+		end
+	end
+	print "[#{str1}] , [#{str2}] : distance = #{matrix[str1.length][str2.length]}\n"
+	return matrix[str1.length][str2.length]
 end
 
+# テキストの店名から、最も近い店の名前を調査対象リストから抽出する
+#	引数 f: テキスト
+#		1行目: 入力した店名
+#		2行目以降: 調査対象リスト
 def shop_reccomend(f)
 	# 入力した店名
 	input = f.gets.strip
 
 	# 調査対象文字列
-	shop_list = []
-	while name = f.gets
-		name.strip!
-		puts name
-		shop_list << name
+	max_point = 10000
+	reccomend_shop = ""
+	while shop = f.gets
+		shop.strip!
+		score = levenshteinDistance(input, shop)
+		if (score < max_point)
+			reccomend_shop = shop
+			max_point = score
+		end
 	end
-
-	matching(input, shop_list)
+	print("reccomend shop is #{reccomend_shop}")
+	return reccomend_shop
 end
 
 f = open("shop.txt")
 shop_reccomend(f)
 f.close
-
 

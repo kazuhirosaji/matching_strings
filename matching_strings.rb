@@ -42,17 +42,17 @@ def shop_reccomend(f)
 
 	# ’²¸‘ÎÛ•¶š—ñ
 	max_point = 10000
-	reccomend_shop = ""
+	recommend_shop = ""
 	while shop = f.gets
 		shop.strip!
 		score = levenshteinDistance(input, shop)
 		if (score < max_point)
-			reccomend_shop = shop
+			recommend_shop = shop
 			max_point = score
 		end
 	end
-	print("reccomend shop is #{reccomend_shop}")
-	return reccomend_shop
+	print("recommend shop is #{recommend_shop}")
+	return recommend_shop
 end
 
 f = open("shop.txt")

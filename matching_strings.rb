@@ -41,14 +41,15 @@ def shop_reccomend(f)
 	input = f.gets.strip
 
 	# ’²¸‘ÎÛ•¶š—ñ
-	max_point = 10000
+	min_point = 10000
 	recommend_shop = ""
 	while shop = f.gets
 		shop.strip!
 		score = levenshteinDistance(input, shop)
-		if (score < max_point)
+		if (score < min_point)
+			# “ü—Í“X–¼‚Æ—Ş—‚µ‚Ä‚¢‚é“X–¼‚ÆA‚»‚Ì‹——£‚ğ‹L˜^
 			recommend_shop = shop
-			max_point = score
+			min_point = score
 		end
 	end
 	print("recommend shop is #{recommend_shop}")
